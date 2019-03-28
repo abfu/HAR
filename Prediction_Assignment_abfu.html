@@ -224,7 +224,7 @@ training &lt;- training_data_raw[colSums(!is.na(testing_data_raw))&gt;0]</code><
 <pre class="r"><code>unique(training$classe)</code></pre>
 <pre><code>## [1] A B C D E
 ## Levels: A B C D E</code></pre>
-<p>Splitting the training data set, to train and test different models.</p>
+<p>In order to cross validate our trained model, we need to split the training data set.</p>
 <pre class="r"><code>inTrain &lt;- createDataPartition(y=training$classe, p=0.7, list=FALSE)
 
 training &lt;- training[inTrain,]
@@ -243,17 +243,17 @@ confusionMatrix(pred_rf, testing$classe)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1181    0    0    0    0
-##          B    0  807    0    0    0
-##          C    0    0  711    0    0
-##          D    0    0    0  661    0
-##          E    0    0    0    0  756
+##          A 1134    0    0    0    0
+##          B    0  827    0    0    0
+##          C    0    0  736    0    0
+##          D    0    0    0  642    0
+##          E    0    0    0    0  788
 ## 
 ## Overall Statistics
 ##                                      
 ##                Accuracy : 1          
 ##                  95% CI : (0.9991, 1)
-##     No Information Rate : 0.2869     
+##     No Information Rate : 0.2748     
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16  
 ##                                      
 ##                   Kappa : 1          
@@ -266,12 +266,12 @@ confusionMatrix(pred_rf, testing$classe)</code></pre>
 ## Specificity            1.0000   1.0000   1.0000   1.0000   1.0000
 ## Pos Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
 ## Neg Pred Value         1.0000   1.0000   1.0000   1.0000   1.0000
-## Prevalence             0.2869   0.1961   0.1727   0.1606   0.1837
-## Detection Rate         0.2869   0.1961   0.1727   0.1606   0.1837
-## Detection Prevalence   0.2869   0.1961   0.1727   0.1606   0.1837
+## Prevalence             0.2748   0.2004   0.1783   0.1556   0.1909
+## Detection Rate         0.2748   0.2004   0.1783   0.1556   0.1909
+## Detection Prevalence   0.2748   0.2004   0.1783   0.1556   0.1909
 ## Balanced Accuracy      1.0000   1.0000   1.0000   1.0000   1.0000</code></pre>
-<p>Accuracy of .9981 for the model.</p>
-<p>Predicting variables for the test set.</p>
+<p>Accuracy of .9981 for the model on the split data from the original training data set.</p>
+<p>Now we can predict the variables from the original test set and combine the results in for each ID in a new data frame.</p>
 <pre class="r"><code>pred_final &lt;- predict(fit_rf, test)
 
 #creating data frame for results
@@ -299,6 +299,7 @@ results</code></pre>
 ## 18     18          B
 ## 19     19          B
 ## 20     20          B</code></pre>
+<p>We achieved a result of 20/20 correct predictions for the test set.</p>
 <pre class="r"><code>stopCluster(cluster)
 registerDoSEQ()</code></pre>
 </div>

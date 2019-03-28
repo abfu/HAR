@@ -84,7 +84,7 @@ unique(training$classe)
 
 
 
-Splitting the training data set, to train and test different models. 
+In order to cross validate our trained model, we need to split the training data set. 
 ```{r}
 inTrain <- createDataPartition(y=training$classe, p=0.7, list=FALSE)
 
@@ -98,7 +98,7 @@ testing <- training[-inTrain,]
 ### Random Forest
 
 Fitting the model
-```{r}
+```{r cache=TRUE}
 set.seed(121)
 fit_rf <- train(classe~., method="rf", training, trControl = fitControl)
 ```
@@ -109,9 +109,9 @@ pred_rf <- predict(fit_rf, testing)
 confusionMatrix(pred_rf, testing$classe)
 ```
 
-Accuracy of .9981 for the model.
+Accuracy of .9981 for the model on the split data from the original training data set.
 
-Predicting variables for the test set.
+Now we can predict the variables from the original test set and combine the results in for each ID in a new data frame.
 ```{r}
 pred_final <- predict(fit_rf, test)
 
@@ -120,7 +120,7 @@ pred_final <- predict(fit_rf, test)
 results <- cbind(test$X, data.frame(pred_final))
 results
 ```
-
+We achieved a result of 20/20 correct predictions for the test set.
 
 ```{r}
 stopCluster(cluster)
